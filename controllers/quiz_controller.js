@@ -73,17 +73,23 @@ exports.index = function(req, res, next) {
 // GET /quizzes/:id
 exports.show = function(req, res, next) {
 
-	var answer = req.query.answer || '';
+	//var answer = req.query.answer || '';
 
 	//res.render('quizzes/show', {quiz: req.quiz,
 		//						answer: answer});
-  if(req.params.format=='json'){
+  //if(req.params.format=='json'){
+    models.User.findAll()
+        .then(function(users) {
+          var answer = req.query.answer || '';
+           if(req.params.format=='json'){
        res.json(req.quiz);
+           }else{
+        res.render('quizzes/show', {quiz: req.quiz,
+               answer: answer, users:users});
     }
-    else{
-      res.render('quizzes/show', {quiz: req.quiz,
-                                    answer: answer});
-    }
+  }).catch(function(error){
+    next(error);
+  });
 };
 
 
